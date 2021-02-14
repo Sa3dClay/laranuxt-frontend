@@ -1,89 +1,74 @@
 <template>
-  <v-app dark>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
-      <v-list>
+  <v-app>
+    <v-navigation-drawer v-model="drawer" app>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title class="title">
+            LaraNuxt
+          </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-divider />
+
+      <v-list dense nav>
         <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
+          v-for="item in items"
+          :key="item.title"
+          :to="item.link"
+          link
         >
-          <v-list-item-action>
+          <!-- icon -->
+          <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
+          </v-list-item-icon>
+          <!-- content -->
           <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar
-      :clipped-left="clipped"
-      fixed
-      app
-    >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn
-        icon
-        @click.stop="miniVariant = !miniVariant"
-      >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title" />
+
+    <v-app-bar app>
+      <v-app-bar-nav-icon @click="drawer = !drawer" />
+      <v-toolbar-title>LaraNuxt</v-toolbar-title>
+
       <v-spacer />
+
       <v-btn
-        icon
-        @click.stop="rightDrawer = !rightDrawer"
+        plain
+        rounded
+        to="/login"
       >
-        <v-icon>mdi-menu</v-icon>
+        Login
+      </v-btn>
+      <v-btn
+        plain
+        rounded
+        to="/register"
+      >
+        Register
       </v-btn>
     </v-app-bar>
+
     <v-main>
-      <v-container>
+      <v-container fluid>
         <nuxt />
       </v-container>
     </v-main>
-    <v-navigation-drawer
-      v-model="rightDrawer"
-      :right="right"
-      temporary
-      fixed
-    >
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light>
-              mdi-repeat
-            </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer
-      :absolute="!fixed"
-      app
-    >
-      <span>&copy; {{ new Date().getFullYear() }}</span>
+
+    <v-footer class="px-12 py-4" app>
+      <p class="ma-0">
+        Copyright@2021
+      </p>
+      <v-spacer />
+      <v-btn icon class="ma-0 pa-0">
+        <v-icon>mdi-twitter</v-icon>
+      </v-btn>
+      <v-btn icon class="ma-0 pa-0">
+        <v-icon>mdi-facebook</v-icon>
+      </v-btn>
     </v-footer>
   </v-app>
 </template>
@@ -92,25 +77,19 @@
 export default {
   data () {
     return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
       items: [
         {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/'
+          link: '/',
+          title: 'home',
+          icon: 'mdi-view-dashboard'
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
+          link: '/posts',
+          title: 'Posts',
+          icon: 'mdi-post'
         }
       ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js'
+      drawer: false
     }
   }
 }

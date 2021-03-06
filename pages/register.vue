@@ -13,27 +13,32 @@
           <v-form>
             <v-text-field
               type="text"
-              label="User Name"
+              name="name"
+              label="Name"
               prepend-icon="mdi-account-circle"
             />
             <v-text-field
               type="email"
+              name="email"
               label="Email"
               prepend-icon="mdi-email"
             />
             <v-text-field
               :type="showPassword ? 'text' : 'password'"
+              name="password"
               label="Password"
+              minlength="8"
               prepend-icon="mdi-lock"
               :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
               @click:append="showPassword = !showPassword"
             />
             <v-text-field
-              :type="showConfirmPassword ? 'text' : 'password'"
+              :type="showPassword ? 'text' : 'password'"
               label="Confirm Password"
+              minlength="8"
               prepend-icon="mdi-lock"
-              :append-icon="showConfirmPassword ? 'mdi-eye' : 'mdi-eye-off'"
-              @click:append="showConfirmPassword = !showConfirmPassword"
+              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+              @click:append="showPassword = !showPassword"
             />
           </v-form>
         </v-card-text>
@@ -52,8 +57,7 @@
 <script>
 export default {
   data: () => ({
-    showPassword: false,
-    showConfirmPassword: false
+    showPassword: false
   })
 }
 </script>

@@ -14,7 +14,7 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
-
+  
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [
   ],
@@ -37,11 +37,37 @@ export default {
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
     // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/auth-next'
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  axios: {},
+  axios: {
+    baseURL: "http://localhost/projects/laranuxt/public/api"
+  },
+
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            url: 'login',
+            method: 'post',
+            propertyName: "meta.token"
+          },
+          logout: {
+            url: 'logout',
+            method: 'post'
+          },
+          user: {
+            url: 'user',
+            method: 'get',
+            propertyName: "data"
+          }
+        }
+      }
+    }
+  },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {

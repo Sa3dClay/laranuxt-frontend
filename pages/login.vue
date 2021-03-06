@@ -12,12 +12,17 @@
         <v-card-text class="px-8 py-4">
           <v-form>
             <v-text-field
+              v-model.trim="form.email"
+              autofocus
+              name="email"
               type="email"
               label="Email"
               prepend-icon="mdi-account-circle"
             />
             <v-text-field
+              v-model.trim="form.password"
               :type="showPassword ? 'text' : 'password'"
+              name="password"
               label="Password"
               prepend-icon="mdi-lock"
               :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
@@ -29,7 +34,7 @@
         <v-card-actions class="px-8 pb-4">
           <v-spacer />
           <!-- right -->
-          <v-btn color="indigo white--text">
+          <v-btn @click.prevent="submit" color="indigo white--text">
             Login
           </v-btn>
         </v-card-actions>
@@ -41,7 +46,22 @@
 <script>
 export default {
   data: () => ({
-    showPassword: false
-  })
+    showPassword: false,
+    form: {
+      email: '',
+      password: ''
+    }
+  }),
+  methods: {
+    async submit () {
+      // console.log('Login')
+
+      await this.$auth.loginWith('local', {
+        data: this.form
+      })
+
+      this.$router.push('/')
+    }
+  }
 }
 </script>

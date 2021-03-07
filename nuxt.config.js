@@ -1,6 +1,9 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
+  // Mode
+  // mode: 'spa',
+
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     titleTemplate: '%s - laranuxt',
@@ -29,7 +32,7 @@ export default {
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
     // https://go.nuxtjs.dev/eslint
-    '@nuxtjs/eslint-module',
+    // '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify'
   ],
@@ -43,29 +46,51 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    baseURL: "http://localhost/projects/laranuxt/public/api"
+    baseURL: "http://localhost/projects/laranuxt/public/api",
+    // proxy: true
   },
+  // proxy: {
+  //   '/laravel': {
+  //     target: 'http://localhost/projects/laranuxt/public/api',
+  //     pathRewrite: { '^/laravel': '/' }
+  //   }
+  // },
 
+  // Auth
   auth: {
     strategies: {
-      local: {
+      'local': {
+        token: {
+          property: 'token',
+          // required: true,
+          // type: 'Bearer'
+        },
+        user: {
+          property: 'user',
+          // autoFetch: true
+        },
         endpoints: {
-          login: {
-            url: 'login',
-            method: 'post',
-            propertyName: "meta.token"
-          },
-          logout: {
-            url: 'logout',
-            method: 'post'
-          },
-          user: {
-            url: 'user',
-            method: 'get',
-            propertyName: "data"
-          }
+          login: { url: 'login', method: 'post' },
+          logout: { url: 'logout', method: 'post' },
+          user: { url: 'user', method: 'get' }
         }
-      }
+      },
+      // 'laravelJWT': {
+      //   provider: 'laravel/jwt',
+      //   url: 'http://localhost/projects/laranuxt/public/api/',
+      //   endpoints: {
+      //     login: { url: 'login', method: 'post' },
+      //     logout: { url: 'logout', method: 'post' },
+      //     user: { url: 'user', method: 'get' }
+      //   },
+      //   token: {
+      //     property: 'access_token',
+      //     maxAge: 60 * 60
+      //   },
+      //   refreshToken: {
+      //     maxAge: 20160 * 60
+      //   }
+      // }
     }
   },
 

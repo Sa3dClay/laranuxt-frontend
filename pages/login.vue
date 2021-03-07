@@ -8,9 +8,10 @@
             Login
           </h2>
         </v-card-title>
-        <!-- card text -->
-        <v-card-text class="px-8 py-4">
-          <v-form>
+        <!-- form -->
+        <v-form @submit.prevent="submit">
+          <!-- card text -->
+          <v-card-text class="px-8 py-4">
             <v-text-field
               v-model.trim="form.email"
               autofocus
@@ -28,16 +29,16 @@
               :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
               @click:append="showPassword = !showPassword"
             />
-          </v-form>
-        </v-card-text>
-        <!-- card actions -->
-        <v-card-actions class="px-8 pb-4">
-          <v-spacer />
-          <!-- right -->
-          <v-btn @click.prevent="submit" color="indigo white--text">
-            Login
-          </v-btn>
-        </v-card-actions>
+          </v-card-text>
+          <!-- card actions -->
+          <v-card-actions class="px-8 pb-4">
+            <v-spacer />
+            <!-- right -->
+            <v-btn type="submit" color="indigo white--text">
+              Login
+            </v-btn>
+          </v-card-actions>
+        </v-form>
       </v-card>
     </v-col>
   </v-row>
@@ -54,13 +55,12 @@ export default {
   }),
   methods: {
     async submit () {
-      // console.log('Login')
-
-      await this.$auth.loginWith('local', {
-        data: this.form
-      })
-
-      this.$router.push('/')
+      try {
+        await this.$auth.loginWith('local', { data: this.form })
+        this.$router.push('/')
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 }

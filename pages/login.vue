@@ -46,6 +46,8 @@
 
 <script>
 export default {
+  middleware: 'auth',
+  auth: 'guest',
   data: () => ({
     showPassword: false,
     form: {

@@ -22,6 +22,7 @@
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
+
           <!-- content -->
           <v-list-item-content>
             <v-list-item-title>{{ item.title }}</v-list-item-title>
@@ -32,24 +33,20 @@
 
     <v-app-bar app>
       <v-app-bar-nav-icon @click="drawer = !drawer" />
+
       <v-toolbar-title>LaraNuxt</v-toolbar-title>
 
       <v-spacer />
 
-      <v-btn
-        plain
-        rounded
-        to="/login"
-      >
-        Login
-      </v-btn>
-      <v-btn
-        plain
-        rounded
-        to="/register"
-      >
-        Register
-      </v-btn>
+      <div v-if="authenticated">
+        <v-btn plain rounded>{{user.name}}</v-btn>
+        <v-btn plain rounded @click.prevent="logout">Logout</v-btn>
+      </div>
+
+      <div v-else>
+        <v-btn plain rounded to="/login">Login</v-btn>
+        <v-btn plain rounded to="/register">Register</v-btn>
+      </div>
     </v-app-bar>
 
     <v-main>
@@ -62,10 +59,13 @@
       <p class="ma-0">
         Copyright@2021
       </p>
+      
       <v-spacer />
+
       <v-btn icon class="ma-0 pa-0">
         <v-icon>mdi-twitter</v-icon>
       </v-btn>
+
       <v-btn icon class="ma-0 pa-0">
         <v-icon>mdi-facebook</v-icon>
       </v-btn>
@@ -90,6 +90,11 @@ export default {
         }
       ],
       drawer: false
+    }
+  },
+  methods: {
+    logout() {
+      this.$auth.logout()
     }
   }
 }

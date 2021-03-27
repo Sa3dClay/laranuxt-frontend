@@ -39,7 +39,7 @@
       <v-spacer />
 
       <div v-if="authenticated">
-        <v-btn plain rounded>{{user.name}}</v-btn>
+        <v-btn plain rounded to="/profile">{{user.name}}</v-btn>
         <v-btn plain rounded @click.prevent="logout">Logout</v-btn>
       </div>
 

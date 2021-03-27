@@ -19,8 +19,8 @@
               v-model="form.name"
               :rules="nameRules"
               prepend-icon="mdi-account-circle"
-              required
             />
+            <p class="red--text" v-if="errors.name">{{ errors.name[0] }}</p>
             
             <v-text-field
               type="email"
@@ -29,8 +29,8 @@
               v-model="form.email"
               :rules="emailRules"
               prepend-icon="mdi-email"
-              required
             />
+            <p class="red--text" v-if="errors.email">{{ errors.email[0] }}</p>
             
             <v-text-field
               :type="showPassword ? 'text' : 'password'"
@@ -42,8 +42,8 @@
               prepend-icon="mdi-lock"
               :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
               @click:append="showPassword = !showPassword"
-              required
             />
+            <p class="red--text" v-if="errors.password">{{ errors.password[0] }}</p>
 
             <v-text-field
               :type="showPassword ? 'text' : 'password'"
@@ -54,8 +54,8 @@
               prepend-icon="mdi-lock"
               :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
               @click:append="showPassword = !showPassword"
-              required
             />
+            <p class="red--text" v-if="errors.confirmPass">{{ errors.confirmPass[0] }}</p>
           </v-card-text>
 
           <!-- card actions -->
@@ -86,7 +86,7 @@ export default {
     },
     valid: false,
     showPassword: false,
-
+    
     nameRules: [
       value => !!value || 'Required.',
       value => (value || '').length <= 20 || 'Max 20 characters.'
@@ -103,30 +103,18 @@ export default {
 
   methods: {
     async submit() {
-      let check = this.validate()
-      
-      if(check) {
-        console.log('U r ready')
-
+      try {
         await this.$axios.$post('register', this.form)
-
         await this.$auth.loginWith('local', {
           data: {
             email: this.form.email,
             password: this.form.password
           }
         })
-
         this.$router.push('/')
-      } else {
-        console.log('password confirmation does not match')
-      }
-    },
-
-    validate() {
-      if(this.form.confirmPass !== this.form.password)
-        return false
-      return true
+      } catch (e) {
+        console.log(e)
+      }      
     }
   }
 }

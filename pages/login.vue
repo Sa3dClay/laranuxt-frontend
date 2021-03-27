@@ -20,6 +20,8 @@
               label="Email"
               prepend-icon="mdi-account-circle"
             />
+            <p class="red--text" v-if="errors.email">{{ errors.email[0] }}</p>
+
             <v-text-field
               v-model.trim="form.password"
               :type="showPassword ? 'text' : 'password'"
@@ -29,6 +31,7 @@
               :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
               @click:append="showPassword = !showPassword"
             />
+            <p class="red--text" v-if="errors.password">{{ errors.password[0] }}</p>
           </v-card-text>
           <!-- card actions -->
           <v-card-actions class="px-8 pb-4">
@@ -48,20 +51,22 @@
 export default {
   middleware: 'auth',
   auth: 'guest',
+
   data: () => ({
-    showPassword: false,
     form: {
       email: '',
       password: ''
-    }
+    },
+    showPassword: false
   }),
+
   methods: {
     async submit () {
       try {
         await this.$auth.loginWith('local', { data: this.form })
         this.$router.push('/')
-      } catch (err) {
-        console.log(err)
+      } catch (e) {
+        console.log(e)
       }
     }
   }

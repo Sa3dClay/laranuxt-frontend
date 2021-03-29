@@ -12,6 +12,8 @@
         <v-form @submit.prevent="submit">
           <!-- card text -->
           <v-card-text class="px-8 py-4">
+            <p class="red--text" v-if="errors.message">{{ errors.message }}</p>
+
             <v-text-field
               v-model.trim="form.email"
               autofocus

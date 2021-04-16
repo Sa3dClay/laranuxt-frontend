@@ -39,7 +39,7 @@
       <v-spacer />
 
       <div v-if="authenticated">
-        <v-btn plain rounded to="/profile">{{user.name}}</v-btn>
+        <v-btn plain rounded to="/dashboard">{{user.name}}</v-btn>
         <v-btn plain rounded @click.prevent="logout">Logout</v-btn>
       </div>
 
@@ -84,8 +84,8 @@ export default {
           icon: 'mdi-view-dashboard'
         },
         {
-          link: '/posts',
-          title: 'Posts',
+          link: '/topics',
+          title: 'Topics',
           icon: 'mdi-post'
         }
       ],

@@ -1,15 +1,20 @@
 <template>
   <v-container>
-    <h3 class="text-center my-4">Topics</h3>
-
     <v-row justify="center">
       <v-col
         cols="12" sm="6" md="4" lg="3"
         v-for="(topic, index) in topics" :key="index"
       >
         <v-card>
-          <v-card-title>
-            {{ topic.title }}
+          <v-card-title class="justify-center">
+            <v-btn 
+              :to="{name: 'topics-id', params: {id: topic.id}}"
+              class="pa-0"
+              plain
+              nuxt
+            >
+              {{ topic.title }}
+            </v-btn>
           </v-card-title>
 
           <v-card-subtitle>
@@ -35,6 +40,7 @@ export default {
 
   async asyncData({$axios}) {
     let {data} = await $axios.$get('/topics')
+    
     return {
       topics: data
     }

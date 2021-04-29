@@ -26,6 +26,18 @@
 
             <p>Created by: {{ post.user.name }}</p>
           </v-card-text>
+
+          <v-card-actions class="justify-end" v-if="authenticated">
+            <div v-if="user.id === topic.user.id">
+              <v-btn color="primary" icon :to="{name: 'topics-edit', params: {id: topic.id}}">
+                <v-icon>mdi-circle-edit-outline</v-icon>
+              </v-btn>
+
+              <v-btn color="error" icon @click="deleteTopic(topic.id, index)">
+                <v-icon>mdi-delete-outline</v-icon>
+              </v-btn>
+            </div>
+          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
@@ -43,6 +55,18 @@ export default {
     
     return {
       topics: data
+    }
+  },
+
+  methods: {
+    async deleteTopic(id, index) {
+      try {
+        await this.$axios.$delete(`/topics/${id}`)
+
+        this.topics.splice(index, 1)
+      } catch(e) {
+        console.log(e)
+      }
     }
   }
 }

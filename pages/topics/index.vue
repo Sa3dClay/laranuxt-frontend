@@ -59,14 +59,35 @@ export default {
   },
 
   methods: {
-    async deleteTopic(id, index) {
-      try {
-        await this.$axios.$delete(`/topics/${id}`)
+    deleteTopic(id, index) {
+      this.$swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes'
+      }).then((result) => {
+        if (result.isConfirmed) {
 
-        this.topics.splice(index, 1)
-      } catch(e) {
-        console.log(e)
-      }
+          try {
+            this.$axios.$delete(`/topics/${id}`)
+            this.topics.splice(index, 1)
+            this.$swal.fire({
+              title: 'Deleted!',
+              icon: 'success'
+            })
+          } catch(e) {
+            console.log(e)
+            this.$swal.fire({
+              title: 'Can not be deleted!',
+              icon: 'error'
+            })
+          }
+
+        }
+      })
     }
   }
 }

@@ -17,7 +17,10 @@
                         {{ topic.created_at }}
                     </v-card-subtitle>
 
-                    <v-card-text v-for="(post, index) in topic.posts" :key="index">
+                    <v-card-text
+                        class="py-1"
+                        v-for="(post, index) in topic.posts" :key="index"
+                    >
                         <h3>{{ post.body }}</h3>
 
                         <p class="indigo--text">Created by: {{ post.user.name }}</p>
@@ -33,7 +36,11 @@
                         </h3>
                     </v-card-title>
 
-                    <v-form v-model="validCreatePost" @submit.prevent="createPost">
+                    <v-form
+                        ref="form"
+                        v-model="validCreatePost"
+                        @submit.prevent="createPost"
+                    >
                         <v-card-text>
                             <v-textarea
                                 v-model="body"
@@ -92,8 +99,9 @@ export default {
         async createPost () {
             try {
                 let {data} = await this.$axios.$post(`/topics/${this.$route.params.id}/posts`, {body: this.body})
-                
+
                 this.topic.posts.push(data)
+                this.$refs.form.reset()
             } catch (e) {
                 console.log(e)
             }

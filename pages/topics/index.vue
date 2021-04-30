@@ -17,14 +17,17 @@
             </v-btn>
           </v-card-title>
 
-          <v-card-subtitle>
+          <v-card-subtitle class="indigo--text">
             {{ topic.created_at }}
           </v-card-subtitle>
 
-          <v-card-text v-for="(post, index) in topic.posts" :key="index">
+          <v-card-text
+            class="py-1"
+            v-for="(post, index) in topic.posts" :key="index"
+          >
             <h3>{{ post.body }}</h3>
 
-            <p>Created by: {{ post.user.name }}</p>
+            <p class="indigo--text">Created by: {{ post.user.name }}</p>
           </v-card-text>
 
           <v-card-actions class="justify-end" v-if="authenticated">

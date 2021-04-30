@@ -29,7 +29,7 @@
             <v-textarea
               v-model.trim="form.body"
               name="body"
-              label="Topic Body"
+              label="Post Body"
               :rules="bodyRules"
               prepend-icon="mdi-card-text-outline"
               clearable
@@ -68,8 +68,8 @@ export default {
     ],
     bodyRules: [
       value => !!value || 'Required.',
-      value => (value || '').length >= 20 || 'Min 20 characters.',
-      value => (value || '').length <= 200 || 'Max 200 characters.'
+      value => (value || '').length >= 10 || 'Min 10 characters.',
+      value => (value || '').length <= 1000 || 'Max 1000 characters.'
     ]
   }),
 

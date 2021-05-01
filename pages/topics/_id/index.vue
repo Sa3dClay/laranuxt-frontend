@@ -20,7 +20,7 @@
                         v-for="(post, index) in topic.posts" :key="index"
                     >
                         <h3>{{ post.body }}</h3>
-                        <small class="indigo--text font-italic">{{ post.created_at }} by {{ post.user.name }}</small>
+                        <small class="indigo--text font-italic">{{ post.updated_at }} by {{ post.user.name }}</small>
 
                         <div
                             v-if="authenticated"
@@ -28,7 +28,8 @@
                         >
                             <div v-if="user.id === post.user.id">
 
-                                <!-- <v-dialog
+                                <!-- str update -->
+                                <v-dialog
                                     transition="dialog-top-transition"
                                     max-width="600"
                                 >
@@ -45,37 +46,58 @@
 
                                     <template v-slot:default="dialog">
                                         <v-card>
-                                            <v-card-title
-                                                color="primary"
-                                                dark
-                                            >
+                                            <v-card-title class="indigo white--text">
                                                 Edit Post
                                             </v-card-title>
 
-                                            <v-form>
+                                            <v-form
+                                                v-model="validUpdatePost"
+                                                @submit.prevent="updatePost(post.id, index)"
+                                            >
                                                 <v-card-text>
-                                                    <h2>Card Text</h2>
+                                                    <v-textarea
+                                                        v-model="updateBody"
+                                                        name="body"
+                                                        label="Post Body"
+                                                        :rules="bodyRules"
+                                                        autofocus
+                                                        @focus="updateBody = post.body"
+                                                        prepend-icon="mdi-card-text-outline"
+                                                        clearable
+                                                        counter
+                                                    />
+
+                                                    <p class="red--text" v-if="errors.body">{{ errors.body[0] }}</p>
                                                 </v-card-text>
 
                                                 <v-card-actions class="justify-end">
-                                                    <v-btn text @click="dialog.value = false">Close</v-btn>
+                                                    <v-btn
+                                                        type="submit"
+                                                        color="indigo white--text"
+                                                        :disabled="!validUpdatePost"
+                                                    >Update</v-btn>
+
+                                                    <v-btn
+                                                        text color="red"
+                                                        @click="dialog.value = false"
+                                                    >Close</v-btn>
                                                 </v-card-actions>
                                             </v-form>
                                         </v-card>
                                     </template>
-                                </v-dialog> -->
+                                </v-dialog>
+                                <!-- end update -->
 
-                                <v-btn color="primary" icon>
-                                    <v-icon>mdi-circle-edit-outline</v-icon>
-                                </v-btn>
-
-                                <v-btn color="error" icon>
+                                <!-- str delete -->
+                                <v-btn color="error" icon @click="deletePost(post.id, index)">
                                     <v-icon>mdi-delete-outline</v-icon>
                                 </v-btn>
+                                <!-- end delete -->
+
                             </div>
                         </div>
 
-                        <hr class="mt-4">
+                        <hr class="mt-8">
                     </v-card-text>
                 </v-card>
             </v-col>
@@ -88,14 +110,15 @@
                         </h3>
                     </v-card-title>
 
+                    <!-- str create -->
                     <v-form
-                        ref="form"
+                        ref="addPostForm"
                         v-model="validCreatePost"
                         @submit.prevent="createPost"
                     >
                         <v-card-text>
                             <v-textarea
-                                v-model="body"
+                                v-model="createBody"
                                 name="body"
                                 label="Post Body"
                                 :rules="bodyRules"
@@ -112,12 +135,10 @@
                                 :disabled="!validCreatePost"
                                 color="indigo white--text"
                                 type="submit"
-                            >
-                                Add Post
-                            </v-btn>
+                            >Add Post</v-btn>
                         </v-card-actions>
-
                     </v-form>
+                    <!-- end create -->
 
                 </v-card>
             </v-col>
@@ -129,8 +150,10 @@
 export default {
     data: () => ({
         topic: {},
-        body: '',
+        createBody: '',
+        updateBody: '',
         validCreatePost: false,
+        validUpdatePost: false,
         
         bodyRules: [
             value => !!value || 'Required.',
@@ -148,15 +171,73 @@ export default {
     },
 
     methods: {
+        // create post
         async createPost () {
             try {
-                let {data} = await this.$axios.$post(`/topics/${this.$route.params.id}/posts`, {body: this.body})
+                let {data} = await this.$axios.$post(`/topics/${this.$route.params.id}/posts`, {
+                    body: this.createBody
+                })
 
                 this.topic.posts.push(data)
-                this.$refs.form.reset()
+                this.$refs.addPostForm.reset()
             } catch (e) {
                 console.log(e)
             }
+        },
+        // update post
+        async updatePost(id, index) {
+            // console.log(id, index, this.updateBody)
+
+            try {
+                let {data} = await this.$axios.$patch(`/topics/${this.$route.params.id}/posts/${id}`, {
+                    body: this.updateBody
+                })
+
+                this.topic.posts.splice(index, 1, data)
+
+                this.$swal.fire({
+                    icon: 'success',
+                    text: 'Post updated successfuly!'
+                })
+            } catch (e) {
+                this.$swal.fire({
+                    icon: 'error',
+                    text: e
+                })
+            }
+        },
+        // delete post
+        deletePost(id, index) {
+            // console.log(id, index)
+
+            this.$swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((res) => {
+                if(res.isConfirmed) {
+
+                    try {
+                        this.$axios.$delete(`/topics/${this.$route.params.id}/posts/${id}`)
+                        this.topic.posts.splice(index, 1)
+                        this.$swal.fire({
+                            title: 'Deleted!',
+                            icon: 'success'
+                        })
+                    } catch (e) {
+                        this.$swal.fire({
+                            title: 'Can not be deleted!',
+                            icon: 'error',
+                            text: e
+                        })
+                    }
+
+                }
+            })
         }
     }
 }

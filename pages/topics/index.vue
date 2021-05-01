@@ -29,7 +29,7 @@
           >
             <h3>{{ post.body }}</h3>
 
-            <small class="indigo--text font-italic">{{ post.created_at }} by {{ post.user.name }}</small>
+            <small class="indigo--text font-italic">{{ post.updated_at }} by {{ post.user.name }}</small>
           </v-card-text>
 
           <v-card-actions class="justify-end" v-if="authenticated">
@@ -84,10 +84,10 @@ export default {
               icon: 'success'
             })
           } catch(e) {
-            console.log(e)
             this.$swal.fire({
               title: 'Can not be deleted!',
-              icon: 'error'
+              icon: 'error',
+              text: e
             })
           }
 

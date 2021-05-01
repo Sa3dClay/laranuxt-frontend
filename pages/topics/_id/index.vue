@@ -6,24 +6,76 @@
 
         <v-row justify="center">
             <v-col cols="10" sm="8" md="6">
-                <v-card class="text-center">
-                    <v-card-title class="justify-center text-uppercase">
-                        {{ topic.title }}
+                <v-card>
+                    <v-card-title class="justify-center text-uppercase indigo">
+                        <h3 class="white--text">{{ topic.title }}</h3>
                     </v-card-title>
 
-                    <hr>
-
-                    <v-card-subtitle class="indigo--text">
-                        {{ topic.created_at }}
+                    <v-card-subtitle class="indigo text-center font-italic">
+                        <small class="white--text">{{ topic.created_at }} by {{ topic.user.name }}</small>
                     </v-card-subtitle>
 
                     <v-card-text
-                        class="py-1"
+                        class="py-4 px-8"
                         v-for="(post, index) in topic.posts" :key="index"
                     >
                         <h3>{{ post.body }}</h3>
+                        <small class="indigo--text font-italic">{{ post.created_at }} by {{ post.user.name }}</small>
 
-                        <p class="indigo--text">Created by: {{ post.user.name }}</p>
+                        <div
+                            v-if="authenticated"
+                            class="d-flex justify-end"
+                        >
+                            <div v-if="user.id === post.user.id">
+
+                                <!-- <v-dialog
+                                    transition="dialog-top-transition"
+                                    max-width="600"
+                                >
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-btn
+                                            color="primary"
+                                            v-bind="attrs"
+                                            v-on="on"
+                                            icon
+                                        >
+                                            <v-icon>mdi-circle-edit-outline</v-icon>
+                                        </v-btn>
+                                    </template>
+
+                                    <template v-slot:default="dialog">
+                                        <v-card>
+                                            <v-card-title
+                                                color="primary"
+                                                dark
+                                            >
+                                                Edit Post
+                                            </v-card-title>
+
+                                            <v-form>
+                                                <v-card-text>
+                                                    <h2>Card Text</h2>
+                                                </v-card-text>
+
+                                                <v-card-actions class="justify-end">
+                                                    <v-btn text @click="dialog.value = false">Close</v-btn>
+                                                </v-card-actions>
+                                            </v-form>
+                                        </v-card>
+                                    </template>
+                                </v-dialog> -->
+
+                                <v-btn color="primary" icon>
+                                    <v-icon>mdi-circle-edit-outline</v-icon>
+                                </v-btn>
+
+                                <v-btn color="error" icon>
+                                    <v-icon>mdi-delete-outline</v-icon>
+                                </v-btn>
+                            </div>
+                        </div>
+
+                        <hr class="mt-4">
                     </v-card-text>
                 </v-card>
             </v-col>

@@ -6,10 +6,10 @@
         v-for="(topic, index) in topics" :key="index"
       >
         <v-card>
-          <v-card-title class="justify-center">
+          <v-card-title class="justify-center red">
             <v-btn 
               :to="{name: 'topics-id', params: {id: topic.id}}"
-              class="pa-0"
+              class="pa-0 white--text"
               plain
               nuxt
             >
@@ -17,17 +17,19 @@
             </v-btn>
           </v-card-title>
 
-          <v-card-subtitle class="indigo--text">
-            {{ topic.created_at }}
+          <v-card-subtitle class="red white--text text-center font-italic">
+            <small>{{ topic.created_at }} by {{ topic.user.name }}</small>
           </v-card-subtitle>
 
+          <hr class="mb-4">
+
           <v-card-text
-            class="py-1"
+            class="py-4 px-4"
             v-for="(post, index) in topic.posts" :key="index"
           >
             <h3>{{ post.body }}</h3>
 
-            <p class="indigo--text">Created by: {{ post.user.name }}</p>
+            <small class="indigo--text font-italic">{{ post.created_at }} by {{ post.user.name }}</small>
           </v-card-text>
 
           <v-card-actions class="justify-end" v-if="authenticated">

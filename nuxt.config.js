@@ -61,7 +61,8 @@ export default {
         token: {
           property: 'meta.token',
           required: true,
-          type: 'Bearer'
+          type: 'Bearer',
+          maxAge: 3600
         },
         user: {
           property: 'data',

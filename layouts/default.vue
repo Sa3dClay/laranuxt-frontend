@@ -55,18 +55,18 @@
       </v-container>
     </v-main>
 
-    <v-footer class="px-12 py-4" app>
+    <v-footer class="px-12 py-2" color="grey lighten-2" app>
       <p class="ma-0">
         Copyright@2021
       </p>
-      
+
       <v-spacer />
 
-      <v-btn icon class="ma-0 pa-0">
+      <v-btn color="blue darken-2" icon class="ma-0 pa-0">
         <v-icon>mdi-twitter</v-icon>
       </v-btn>
 
-      <v-btn icon class="ma-0 pa-0">
+      <v-btn color="blue darken-4" icon class="ma-0 pa-0">
         <v-icon>mdi-facebook</v-icon>
       </v-btn>
     </v-footer>

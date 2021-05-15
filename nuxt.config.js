@@ -62,7 +62,7 @@ export default {
           property: 'meta.token',
           required: true,
           type: 'Bearer',
-          maxAge: 3600
+          maxAge: 7200
         },
         user: {
           property: 'data',

@@ -3,7 +3,7 @@
     <v-row justify="center">
       <v-col
         cols="12" sm="6" md="4" lg="3"
-        v-for="(topic, index) in topics" :key="index"
+        v-for="(topic, topicIndex) in topics" :key="topicIndex"
       >
         <v-card>
           <v-card-title class="justify-center red">
@@ -25,11 +25,54 @@
 
           <v-card-text
             class="py-4 px-4"
-            v-for="(post, index) in topic.posts" :key="index"
+            v-for="(post, postIndex) in topic.posts" :key="postIndex"
           >
             <h3>{{ post.body }}</h3>
 
             <small class="indigo--text font-italic">{{ post.updated_at }} by {{ post.user.name }}</small>
+
+            <v-spacer></v-spacer>
+
+            <div class="d-flex justify-end">
+              <!-- User authenticated and not the owner of the post -->
+              <div v-if="authenticated && user.id != post.user.id">
+                <!-- user already like post -->
+                <div v-if="alreadyLike(post)">
+                  <v-btn
+                    icon
+                    color="primary"
+                    @click="dislikePost(topic.id, post.id, topicIndex)"
+                  >
+                    <v-icon>mdi-thumb-up</v-icon>
+                  </v-btn>
+                </div>
+
+                <!-- user did not like post -->
+                <div v-else>
+                  <v-btn
+                    icon
+                    @click="likePost(topic.id, post.id, topicIndex)"
+                  >
+                    <v-icon>mdi-thumb-up-outline</v-icon>
+                  </v-btn>
+                </div>
+              </div>
+
+              <!-- User unauthenticated or owns the post -->
+              <div v-else>
+                <v-btn icon disabled>
+                  <v-icon>mdi-thumb-up</v-icon>
+                </v-btn>
+              </div>
+
+              <!-- show likes count -->
+              <span
+                class="pt-2"
+                v-if="post.like_count > 0"
+              >
+                {{ post.like_count }}
+              </span>
+            </div>
           </v-card-text>
 
           <v-card-actions class="justify-end" v-if="authenticated">
@@ -38,7 +81,7 @@
                 <v-icon>mdi-circle-edit-outline</v-icon>
               </v-btn>
 
-              <v-btn color="error" icon @click="deleteTopic(topic.id, index)">
+              <v-btn color="error" icon @click="deleteTopic(topic.id, topicIndex)">
                 <v-icon>mdi-delete-outline</v-icon>
               </v-btn>
             </div>
@@ -93,6 +136,47 @@ export default {
 
         }
       })
+    },
+
+    alreadyLike(post) {
+      if(post.users_like) {
+        if(post.users_like.some(
+          user => user.id === this.user.id
+        )) {
+          return true
+        }
+      }
+      return false
+    },
+
+    async likePost(topicId, postId, index) {
+      try {
+        await this.$axios.$post(`/topics/${topicId}/posts/${postId}/likes`)
+
+        let {data} = await this.$axios.$get(`/topics/${topicId}`)
+        this.topics.splice(index, 1, data)
+      } catch(e) {
+        this.$swal.fire({
+          title: 'Can not perform action!',
+          icon: 'error',
+          text: e
+        })
+      }
+    },
+
+    async dislikePost(topicId, postId, index) {
+      try {
+        await this.$axios.$delete(`/topics/${topicId}/posts/${postId}/likes`)
+
+        let {data} = await this.$axios.$get(`/topics/${topicId}`)
+        this.topics.splice(index, 1, data)
+      } catch(e) {
+        this.$swal.fire({
+          title: 'Can not perform action!',
+          icon: 'error',
+          text: e
+        })
+      }
     }
   }
 }

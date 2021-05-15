@@ -5,7 +5,7 @@
         </v-btn>
 
         <v-row justify="center">
-            <v-col cols="10" sm="8" md="6">
+            <v-col cols="12" sm="10" md="8">
                 <v-card>
                     <v-card-title class="justify-center text-uppercase indigo">
                         <h3 class="white--text">{{ topic.title }}</h3>
@@ -102,7 +102,7 @@
                 </v-card>
             </v-col>
 
-            <v-col cols="10" sm="8" md="6" v-if="authenticated">
+            <v-col cols="12" sm="10" md="8" v-if="authenticated">
                 <v-card>
                     <v-card-title class="indigo">
                         <h3 class="white--text">

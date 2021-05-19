@@ -23,6 +23,19 @@
                         <small class="indigo--text font-italic">{{ post.updated_at }} by {{ post.user.name }}</small>
 
                         <div
+                            class="d-flex justify-start"
+                            v-if="post.like_count > 0"
+                        >
+                            <v-btn icon disabled>
+                                <v-icon>mdi-thumb-up</v-icon>
+                            </v-btn>
+
+                            <span class="pt-2">
+                                {{ post.like_count }}
+                            </span>
+                        </div>
+
+                        <div
                             v-if="authenticated"
                             class="d-flex justify-end"
                         >
@@ -223,6 +236,7 @@ export default {
                     try {
                         this.$axios.$delete(`/topics/${this.$route.params.id}/posts/${id}`)
                         this.topic.posts.splice(index, 1)
+                        
                         this.$swal.fire({
                             title: 'Deleted!',
                             icon: 'success'

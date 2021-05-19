@@ -77,13 +77,23 @@
 
           <v-card-actions class="justify-end" v-if="authenticated">
             <div v-if="user.id === topic.user.id">
-              <v-btn color="primary" icon :to="{name: 'topics-edit', params: {id: topic.id}}">
+              <v-btn
+                icon
+                color="primary"
+                :to="{name: 'topics-edit', params: {id: topic.id}}"
+              >
                 <v-icon>mdi-circle-edit-outline</v-icon>
               </v-btn>
 
-              <v-btn color="error" icon @click="deleteTopic(topic.id, topicIndex)">
-                <v-icon>mdi-delete-outline</v-icon>
-              </v-btn>
+              <div v-if="topic.posts.length <= 0">
+                <v-btn
+                  icon
+                  color="error"
+                  @click="deleteTopic(topic.id, topicIndex)"
+                >
+                  <v-icon>mdi-delete-outline</v-icon>
+                </v-btn>
+              </div>
             </div>
           </v-card-actions>
         </v-card>

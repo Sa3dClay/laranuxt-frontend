@@ -66,7 +66,7 @@ export default {
     async submit () {
       try {
         await this.$auth.loginWith('local', { data: this.form })
-        this.$router.push('/dashboard')
+        this.$router.push('/')
       } catch (e) {
         console.log(e)
       }

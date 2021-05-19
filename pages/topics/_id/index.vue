@@ -63,7 +63,6 @@
                                                         autofocus
                                                         @focus="updateBody = post.body"
                                                         prepend-icon="mdi-card-text-outline"
-                                                        clearable
                                                         counter
                                                     />
 
